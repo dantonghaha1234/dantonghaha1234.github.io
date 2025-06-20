@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大三班毕业祝福</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- 装饰元素 -->
+    <div class="dec-cloud cloud-1"></div>
+    <div class="dec-cloud cloud-2"></div>
+    <div class="dec-cloud cloud-3"></div>
+
+    <div class="balloon balloon-1"></div>
+    <div class="balloon balloon-2"></div>
+    <div class="balloon balloon-3"></div>
+
+    <!-- 主容器 -->
+    <div class="container">
+        <!-- 左侧选择面板 -->
+        <div class="left-panel">
+            <div class="header">
+                <h1>🎓 童心纪念册 <i class="fa fa-heart text-primary animate-pulse" style="color: #ff6b8b;"></i></h1>
+                <p>请选择小朋友或老师<br>查看专属毕业祝福吧～</p>
+            </div>
+
+            <div class="selection-section">
+                <div class="input-group">
+                    <label for="nameSelect"><i class="fas fa-graduation-cap"></i> 选择名字</label>
+                    <div class="select-group">
+                        <select id="nameSelect">
+                            <option value="">请选择小朋友或老师</option>
+                            <optgroup label="小朋友们" id="baby">
+                            </optgroup>
+                            <optgroup label="老师们" id="teacher">
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="teacher-notes">
+                    <i class="fas fa-star"></i> 小提示：每位小朋友都有专属毕业祝福，选择名字就能看到他们的可爱照片和祝福语啦！
+                </div>
+            </div>
+        </div>
+
+        <!-- 右侧展示面板 -->
+        <div class="right-panel">
+            <div class="display-area">
+                <div class="photo-container">
+                    <div class="carousel-track">
+                        <div class="carousel-wrapper" id="carouselWrapper">
+                            <!-- 轮播项由JavaScript动态生成 -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="details">
+                    <div class="name" id="displayName"></div>
+                    <div class="role" id="role"></div>
+                    <div class="blessing" id="blessing">
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer">
+                2025中科院东升幼儿园大三班 · 愿小朋友们永远健康快乐💖
+            </div>
+        </div>
+    </div>
+    <!-- 照片放大模态框 -->
+    <div class="photo-modal" id="photoModal">
+        <div class="modal-content">
+            <div class="modal-photo" id="modalPhoto"></div>
+            <div class="close-modal" id="closeModal">×</div>
+        </div>
+    </div>
+    <script>
+        // 人物数据
+        const people = [
+            {
+                name: "曹新宇", photos: ["./img/cxy.jpg", "./img/cxy (3).jpg", "./img/cxy (2).jpg"], role: "小朋友", blessing: "新宇小朋友，愿你像小树苗一样，在成长的路上永远向阳而生，每天都充满活力！"
+            },
+            { name: "褚维时", photos: ["./img/cws.jpg", "./img/cws (2).jpg"], role: "小朋友", blessing: "褚褚小朋友，你的笑容带来阳光！希望你永远保持纯真笑容，在新的起点创造属于你的七彩世界！" },
+            { name: "崔霆曦", photos: ["./img/ctx (5).jpg", "./img/ctx.jpg", "./img/ctx (3).jpg", "./img/ctx (4).jpg", "./img/ctx (2).jpg",], role: "小朋友", blessing: "未来小朋友，愿你带着梦想的翅膀，飞向充满希望的明天！" },
+            { name: "高逸飞", photos: ["./img/gyf (2).jpg", "./img/gyf.jpg",], role: "小朋友", blessing: "卓卓小朋友，愿你带着幼儿园的纯真善良，在成长中传递爱与温暖！" },
+            { name: "郭程姝", photos: ["./img/gcs (2).jpg", "./img/gcs (3).jpg", "./img/gcs.jpg"], role: "小朋友", blessing: "程程小朋友，你的笑容是最温暖的阳光，希望这光芒照亮未来的崭新旅程！" },
+            { name: "黄宣博", photos: ["./img/hxb.jpg", "./img/hxb (2).jpg", "./img/hxb (3).jpg"], role: "小朋友", blessing: "贝贝小朋友，愿你像欢快的溪流奔向大海一样，带着幼儿园的热情与活力，在未来的广阔天地里自由奔腾吧！" },
+            { name: "贾沐熹", photos: ["./img/jmx (4).jpg", "./img/jmx.jpg", "./img/jmx (3).jpg", "./img/jmx (2).jpg",], role: "小朋友", blessing: "糖豆小朋友，你像春天绽放的花朵！愿你在小学的校园里继续勇敢探索世界，每天都像花儿一样开心绽放！" },
+            { name: "刘佳隽", photos: ["./img/ljj.jpg", "./img/ljj (4).jpg", "./img/ljj (6).jpg", "./img/ljj (2).jpg",], role: "小朋友", blessing: "隽隽小朋友，愿你的笑容永远像阳光一样灿烂，带着幼儿园的温暖回忆，开启新旅程！" },
+            { name: "刘嘉树", photos: ["./img/ljs.jpg", "./img/ljs (2).jpg", "./img/ljs (3).jpg", "./img/ljs (4).jpg"], role: "小朋友", blessing: "嘉树小朋友，希望你带着幼儿园学到的勇敢和好奇，去探索更广阔的世界！" },
+            { name: "李泰然", photos: [ "./img/ltr.jpg", "./img/ltr (2).jpg", "./img/ltr (4).jpg"], role: "小朋友", blessing: "泰然小朋友，愿你成为一个快乐的小太阳，照亮自己，也温暖身边的人！" },
+            { name: "李翊溪", photos: ["./img/lyx (2).jpg", "./img/lyx (3).jpg", "./img/lyx.jpg", "./img/lyx (4).jpg", "./img/lyx (5).jpg"], role: "小朋友", blessing: "小宝小朋友，愿你的生活永远充满童趣，未来的每一步都走得踏实又精彩！" },
+            { name: "李亦昕", photos: ["./img/ly (2).jpg", "./img/ly (3).jpg", "./img/ly.jpg", "./img/ly (5).jpg", "./img/ly (4).jpg"], role: "小朋友", blessing: "昕昕小朋友，愿你的人生充满彩虹，每一个梦想都能绚丽绽放！" },
+            { name: "李柘铖", photos: ["./img/lzc (2).jpg", "./img/lzc (3).jpg", "./img/lzc.jpg",], role: "小朋友", blessing: "仔仔小朋友，愿你带着幼儿园的自信勇敢，在未来创造属于自己的辉煌！" },
+            { name: "那亦格旗", photos: ["./img/nygq (2).jpg", "./img/nygq (3).jpg", "./img/nygq (4).jpg", "./img/nygq.jpg",], role: "小朋友", blessing: "八宝小朋友，愿你像春天的嫩芽，在知识的滋养下茁壮成长，生机勃勃！" },
+            { name: "庞铭博", photos: ["./img/pmb (4).jpg", "./img/pmb (2).jpg", "./img/pmb (3).jpg", "./img/pmb.jpg",], role: "小朋友", blessing: "成浩小朋友，愿你在未来的旅程中，一路欢歌笑语，收获满满的成长与幸福！" },
+            { name: "曲彦姝", photos: ["./img/qys.jpg", "./img/qys (2).jpg", "./img/qys (3).jpg"], role: "小朋友", blessing: "祖儿小朋友，愿你的生活永远充满童趣，未来的每一步都走得踏实又精彩！" },
+            { name: "盛欣然", photos: ["./img/sxr (2).jpg", "./img/sxr (3).jpg", "./img/sxr.jpg", "./img/sxr (5).jpg", "./img/sxr (4).jpg"], role: "小朋友", blessing: "小小小朋友，希望你带着幼儿园老师和小伙伴儿的爱，在成长路上一路繁花相伴！" },
+            { name: "童柯凡", photos: ["./img/tkf (4).jpg", "./img/tkf (5).jpg", "./img/tkf.jpg", "./img/tkf (2).jpg", "./img/tkf (3).jpg",], role: "小朋友", blessing: "童童小朋友，愿你保持天真烂漫的童心，在未来的学习生活中快乐成长！" },
+            { name: "王潇然", photos: ["./img/wxr.jpg", "./img/wxr (2).jpg", "./img/wxr (4).jpg", "./img/wxr (3).jpg",], role: "小朋友", blessing: "王子小朋友,祝你在成长的道路上，像小骏马一样勇往直前，奔向理想的远方！" },
+            { name: "王梓熙", photos: ["./img/wzx (2).jpg", "./img/wzx (3).jpg", "./img/wzx.jpg", "./img/wzx (5).jpg", "./img/wzx (4).jpg"], role: "小朋友", blessing: "熙熙小朋友，祝你在未来的旅程中，一路欢歌笑语，收获满满的成长与幸福！" },
+            { name: "徐立迁", photos: ["./img/xlq.jpg", "./img/xlq (3).jpg", "./img/xlq1.jpg", "./img/xlq (2).jpg"], role: "小朋友", blessing: "乐乐小朋友，祝你像闪耀的小星星，在自己的天空中绽放独特光芒，前程似锦！" },
+            { name: "张竞予", photos: ["./img/zjy (2).jpg", "./img/zjy (3).jpg", "./img/zjy (4).jpg", "./img/zjy.jpg",], role: "小朋友", blessing: "登登小朋友，希望你的生活永远充满动听的旋律，幸福常伴左右！" },
+            { name: "张沐新", photos: ["./img/zmx (3).jpg", "./img/zmx (4).jpg", "./img/zmx (2).jpg", "./img/zmx.jpg",], role: "小朋友", blessing: "沐沐小朋友，愿你在未来的日子里，像小帆船一样乘风破浪，驶向成功彼岸！" },
+            { name: "张忻悦", photos: ["./img/zxy (3).jpg", "./img/zxy (4).jpg", "./img/zxy.jpg", "./img/zxy (2).jpg",], role: "小朋友", blessing: "麦麦小朋友，愿你带着你的温暖，照亮新伙伴的心房，收获满满友谊！" },
+            { name: "郑越尘", photos: ["./img/zyc.jpg", "./img/zyc (3).jpg", "./img/zyc1.jpg"], role: "小朋友", blessing: "越越小朋友，祝你像欢快的小音符，在生活的乐章中奏响美妙动听的旋律！" },
+            { name: "朱霄霄", photos: ["./img/zxx (3).jpg", "./img/zxx (2).jpg", "./img/zxx (4).jpg", "./img/zxx.jpg",], role: "小朋友", blessing: "霄霄小朋友，祝你像美丽的蝴蝶，在成长的花园里翩翩起舞，享受美好时光！" },
+            { name: "宗思源", photos: ["./img/zsy (2).jpg", "./img/zsy (3).jpg", "./img/zsy (4).jpg", "./img/zsy (5).jpg", "./img/zsy (6).jpg"], role: "小朋友", blessing: "石头小朋友，愿你成为生活中的小勇士，无论遇到什么困难，都能勇往直前！" },
+            { name: "管老师", photos: ["./img/hy.jpg", "./img/hy (2).jpg"], role: "老师", blessing: "管老师就像春天的暖风，感谢您无微不至的呵护，您是孩子们最信任的引路人。祝愿您在教育的田野里收获更多甜美果实，被温柔与美好紧紧环绕！" },
+            { name: "饶老师", photos: ["./img/hy.jpg", "./img/hy (2).jpg"], role: "老师", blessing: "饶老师您是晨曦中的园丁，用温柔的双手呵护每一颗稚嫩的幼苗，让他们在爱的滋养中茁壮成长。感恩您的付出，愿您的生活如春日繁花，永远充满芬芳与诗意！" },
+            { name: "王老师", photos: ["./img/hy.jpg", "./img/hy (2).jpg"], role: "老师", blessing: "王老师您是点亮童心的明灯，用耐心和智慧为孩子们指引方向。衷心祝愿您平安喜乐，未来的日子里，收获满满的幸福与温暖！" }
+        ];
+
+        // DOM元素
+        const nameSelect = document.getElementById('nameSelect');
+        // const photo = document.getElementById('photo');
+        const displayName = document.getElementById('displayName');
+        const roleElement = document.getElementById('role');
+        const blessingElement = document.getElementById('blessing');
+        const carouselWrapper = document.getElementById('carouselWrapper');
+        const modalPhoto = document.getElementById('modalPhoto');
+        const closeModal = document.getElementById('closeModal');
+
+        const baby = document.getElementById('baby');
+        const teacher = document.getElementById('teacher');
+
+        people.forEach(user => {
+            const item = document.createElement('option');
+            item.value = user.name;
+            item.innerHTML = user.name;
+            baby.appendChild(item)
+
+            if (user.role === '小朋友') {
+
+                baby.appendChild(item)
+            } else {
+                teacher.appendChild(item)
+            }
+
+        });
+        // 下拉框选择
+        nameSelect.addEventListener('change', function () {
+            const name = this.value;
+            if (!name) {
+                displayDefault();
+                return;
+            }
+
+            const person = people.find(p => p.name === name.split(' ')[0]);
+            if (person) {
+                updateDisplay(person);
+            }
+            // 创建彩色纸屑效果
+            createConfetti();
+        });
+        // 创建彩色纸屑效果
+        function createConfetti() {
+            const container = document.querySelector('.right-panel');
+            const colors = ['#FF9AA2', '#FFB7B2', '#FFDAC1', '#E2F0CB', '#B5EAD7', '#C7CEEA'];
+
+            // 清除之前的纸屑
+            document.querySelectorAll('.confetti').forEach(el => el.remove());
+
+            // 创建新纸屑
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = -10 + 'px';
+                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                confetti.style.width = Math.random() * 10 + 5 + 'px';
+                confetti.style.height = Math.random() * 10 + 5 + 'px';
+                container.appendChild(confetti);
+
+                // 动画
+                const animation = confetti.animate([
+                    { top: '-10px', opacity: 0 },
+                    { top: '10%', opacity: 1 },
+                    { top: '100%', opacity: 0 }
+                ], {
+                    duration: Math.random() * 3000 + 2000,
+                    delay: Math.random() * 1000,
+                    easing: 'cubic-bezier(0.1, 0.8, 0.9, 1)'
+                });
+
+                animation.onfinish = () => confetti.remove();
+            }
+        }
+        // 更新显示内容
+        function updateDisplay(person) {
+            // 添加照片旋转效果
+            // photo.style.animation = 'none';
+            // setTimeout(() => {
+            //     photo.style.animation = 'rotateFrame 0.8s ease forwards';
+            //     photo.textContent = person.emoji;
+            // }, 10);
+
+            // 名称效果
+            displayName.textContent = person.name;
+            roleElement.textContent = person.role;
+            blessingElement.textContent = person.blessing;
+
+            // 文字动画
+            blessingElement.style.animation = 'none';
+            setTimeout(() => {
+                blessingElement.style.animation = 'fadeIn 0.8s ease forwards';
+            }, 100);
+
+            createCarouselItems(person);
+        }
+        // 创建轮播项目
+        function createCarouselItems(person) {
+            carouselWrapper.innerHTML = '';
+            // 复制两套相同的轮播项以实现无缝滚动效果
+            for (let i = 0; i < 2; i++) {
+                person.photos && person.photos.forEach((photo, index) => {
+                    const item = document.createElement('img');
+                    item.className = 'carousel-item';
+                    item.dataset.index = index;
+                    item.src = photo;
+
+                    // 点击事件 - 显示照片详情
+                    item.addEventListener('click', () => {
+                        showPhotoModal(person, photo);
+                    });
+                    carouselWrapper.appendChild(item);
+                });
+            }
+        }
+
+        // 显示照片详情模态框
+        function showPhotoModal(person, photo) {
+            modalPhoto.innerHTML = ''
+            const item = document.createElement('img');
+            item.src = photo;
+            item.className = 'img-item';
+            modalPhoto.appendChild(item)
+            photoModal.classList.add('active');
+        }
+        // 默认显示
+        function displayDefault() {
+            createCarouselItems(
+                {
+                    photos: ["./img/dhy.jpg", "./img/dhy (2).jpg"]
+                })
+            displayName.textContent = "大三班小伙伴";
+            roleElement.textContent = "小朋友";
+            // blessingElement.textContent = "幼儿园毕业是新的起点，祝愿所有小朋友在学习与成长的路上永远保持好奇心与创造力，绽放属于自己的光芒！";
+            blessingElement.textContent = "还记得你们第一次摇摇晃晃走进幼儿园的样子吗？现在你们已经长成勇敢自信的小小少年。愿你们带着这里的美好回忆，继续在阳光下蹦蹦跳跳地长大呀！";
+        }
+        // 初始添加动画
+        setTimeout(() => {
+            document.querySelector('.left-panel').style.animation = 'bounceIn 1s ease';
+            document.querySelector('.right-panel').style.animation = 'slideIn 1s ease';
+        }, 100);
+        closeModal.addEventListener('click', () => {
+            photoModal.classList.remove('active');
+        });
+
+        photoModal.addEventListener('click', (e) => {
+            if (e.target === photoModal) {
+                photoModal.classList.remove('active');
+            }
+        });
+        // 初始化页面
+        function init() {
+            displayDefault()
+            createConfetti();
+        }
+
+        // 页面加载完成后初始化
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Comic Sans MS', 'Marker Felt', '华文圆体', '微软雅黑', sans-serif;
+    }
+
+    body {
+        background: linear-gradient(135deg, #ffd6e7 0%, #c1e3ff 100%);
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        position: relative;
+    }
+
+    /* 装饰元素 - 云朵、气球 */
+    .dec-cloud {
+        position: absolute;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 50%;
+        z-index: 0;
+        animation: float 12s infinite ease-in-out;
+    }
+
+    .cloud-1 {
+        top: 10%;
+        left: 2%;
+        width: 120px;
+        height: 60px;
+        animation-duration: 15s;
+    }
+
+    .cloud-2 {
+        top: 25%;
+        right: 2%;
+        width: 140px;
+        height: 70px;
+        animation-duration: 18s;
+    }
+
+    .cloud-3 {
+        bottom: 2%;
+        left: 5%;
+        width: 100px;
+        height: 50px;
+        animation-duration: 12s;
+    }
+
+    .balloon {
+        position: absolute;
+        width: 50px;
+        height: 70px;
+        border-radius: 50%;
+        z-index: 0;
+        animation: float-balloon 10s infinite ease-in-out;
+    }
+
+    .balloon-1 {
+        top: 15%;
+        right: 3%;
+        background: #ff8a80;
+        animation-duration: 14s;
+    }
+
+    .balloon-2 {
+        bottom: 10%;
+        right: 5%;
+        background: #80d8ff;
+        animation-duration: 12s;
+    }
+
+    .balloon-3 {
+        top: 25%;
+        left: 5%;
+        background: #ffd180;
+        animation-duration: 16s;
+    }
+
+    /* 漂浮动画 */
+    @keyframes float {
+
+        0%,
+        100% {
+            transform: translateY(0) translateX(0);
+        }
+
+        25% {
+            transform: translateY(-20px) translateX(15px);
+        }
+
+        50% {
+            transform: translateY(-10px) translateX(-20px);
+        }
+
+        75% {
+            transform: translateY(-15px) translateX(10px);
+        }
+    }
+
+    @keyframes float-balloon {
+
+        0%,
+        100% {
+            transform: translateY(0) rotate(-5deg);
+        }
+
+        25% {
+            transform: translateY(-25px) rotate(5deg);
+        }
+
+        50% {
+            transform: translateY(-40px) rotate(-3deg);
+        }
+
+        75% {
+            transform: translateY(-15px) rotate(2deg);
+        }
+    }
+
+    @keyframes carousel-scroll {
+        0% {
+            transform: translateX(0);
+        }
+
+        100% {
+            transform: translateX(-50%);
+        }
+    }
+
+    .container {
+        width: 80%;
+        /* max-width: 1100px; */
+        height: 90vh;
+        display: grid;
+        grid-template-columns: 1fr 1.8fr;
+        gap: 20px;
+        background: rgba(255, 255, 255, 0.92);
+        border-radius: 30px;
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+        overflow: hidden;
+        position: relative;
+        z-index: 10;
+        padding: 20px;
+    }
+
+    .left-panel {
+        background: linear-gradient(to bottom, #ffb6c1, #ffccd5);
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        border-radius: 25px;
+        box-shadow: 5px 0 20px rgba(0, 0, 0, 0.1);
+        position: relative;
+        overflow: hidden;
+        animation: bounceIn 1s ease;
+    }
+
+    .left-panel::before {
+        content: "";
+        position: absolute;
+        top: -50px;
+        left: -50px;
+        width: 200px;
+        height: 200px;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+    }
+
+    .left-panel::after {
+        content: "";
+        position: absolute;
+        bottom: -50px;
+        right: -50px;
+        width: 150px;
+        height: 150px;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+        border-radius: 50%;
+    }
+
+    .header {
+        text-align: center;
+        margin-bottom: 40px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .header h1 {
+        font-size: 28px;
+        color: #fff;
+        text-shadow: 3px 3px 0 rgba(219, 112, 147, 0.6);
+        margin-bottom: 20px;
+        letter-spacing: 1px;
+        animation: rainbow 8s infinite linear;
+        position: relative;
+        display: inline-block;
+    }
+
+    .header h1::after {
+        content: "✨";
+        position: absolute;
+        top: -20px;
+        right: -30px;
+        font-size: 2rem;
+        animation: sparkle 2s infinite;
+    }
+
+    .header p {
+        font-size: 18px;
+        color: #fff;
+        max-width: 300px;
+        margin: 0 auto;
+        line-height: 1.6;
+        background: rgba(255, 182, 193, 0.5);
+        padding: 10px 15px;
+        border-radius: 20px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .selection-section {
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 20px;
+        padding: 25px;
+        flex-grow: 1;
+        position: relative;
+        z-index: 1;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    .input-group {
+        margin-bottom: 25px;
+    }
+
+    label {
+        display: block;
+        font-size: 18px;
+        color: #d44682;
+        margin-bottom: 15px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        animation: bounce 2s infinite;
+    }
+
+    label i {
+        margin-right: 12px;
+        color: #ff6b94;
+        font-size: 1.8rem;
+    }
+
+    .select-group {
+        position: relative;
+    }
+
+    select {
+        width: 100%;
+        padding: 14px 56px 14px 16px;
+        font-size: 20px;
+        border-radius: 20px;
+        background: #fff9fb;
+        border: 3px solid #ffacc7;
+        box-shadow: 0 8px 20px rgba(255, 107, 148, 0.25);
+        color: #d44682;
+        cursor: pointer;
+        appearance: none;
+        transition: all 0.3s;
+    }
+
+    select:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 25px rgba(255, 107, 148, 0.35);
+    }
+
+    select:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(255, 173, 182, 0.8);
+    }
+
+    .select-group::after {
+        content: "🎓";
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+        font-size: 30px;
+        animation: float-item 3s infinite ease-in-out;
+    }
+
+    .teacher-notes {
+        background: #ffeef3;
+        padding: 18px;
+        border-radius: 18px;
+        margin-top: 30px;
+        border-left: 5px solid #ffacc7;
+        font-size: 18px;
+        color: #d44682;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .teacher-notes::before {
+        content: "💖";
+        position: absolute;
+        top: -15px;
+        right: 15px;
+        font-size: 4rem;
+        opacity: 0.15;
+    }
+
+    .right-panel {
+        /* padding: 40px 30px; */
+        display: flex;
+        flex-direction: column;
+        /* justify-content: center; */
+        position: relative;
+        z-index: 10;
+        overflow: hidden;
+        border-radius: 25px;
+        background: linear-gradient(145deg, #f0f7ff, #ffeef7);
+        box-shadow: inset 0 0 30px rgba(255, 182, 193, 0.2),
+            0 15px 40px rgba(0, 0, 0, 0.1);
+        animation: slideIn 1s ease;
+    }
+
+    .display-area {
+        position: relative;
+        height: calc(100% - 65px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+    }
+
+    .carousel-track {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        border-radius: 20px;
+    }
+
+    .photo-container {
+        position: relative;
+        width: 90%;
+        height: 50%;
+        margin-bottom: 30px;
+        /* perspective: 1000px; */
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .carousel-wrapper {
+        display: flex;
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        /* top: 50%; */
+        /* transform: translateY(-50%); */
+        animation: carousel-scroll 20s infinite linear;
+    }
+
+    .carousel-item {
+        /* width: 400px;
+        height: 400px;
+        margin: 0 30px; */
+        /* width: 80%; */
+        /* flex-shrink: 0; */
+        border-radius: 10px;
+        background: linear-gradient(135deg, #ff9ebb 0%, #ffacc7 100%);
+        /* display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 12rem;
+        color: white;
+        position: relative; */
+        box-shadow: 0 30px 50px rgba(255, 107, 148, 0.4),
+            inset 0 0 50px rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+    }
+
+
+    .details {
+        text-align: center;
+        width: 90%;
+        height: 50%;
+        /* max-width: 550px; */
+        padding: 30px;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 25px;
+        box-shadow: 0 15px 40px rgba(255, 107, 148, 0.2);
+        position: relative;
+        transition: all 0.5s ease;
+    }
+
+    .name {
+        font-size: 26px;
+        color: #ff6b94;
+        /* margin-bottom: 15px; */
+        font-weight: bold;
+        text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
+        position: relative;
+        display: inline-block;
+    }
+
+    .name::after {
+        content: "🌟";
+        position: absolute;
+        top: -15px;
+        right: -35px;
+        font-size: 2rem;
+        animation: spin 5s infinite linear;
+    }
+
+    .role {
+        font-size: 20px;
+        color: #ff85a2;
+        background: #fff0f5;
+        padding: 6px 20px;
+        border-radius: 30px;
+        display: inline-block;
+        /* margin-bottom: 25px; */
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        border: 2px dotted #ffacc7;
+    }
+
+    .blessing {
+        font-size: 22px;
+        color: #d44682;
+        line-height: 1.8;
+        padding: 20px 30px;
+        background: #fffafc;
+        border-radius: 25px;
+        /* margin-top: 20px; */
+        position: relative;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+        animation: fadeIn 1s ease;
+        min-height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .blessing::before,
+    .blessing::after {
+        content: '"';
+        position: absolute;
+        font-size: 6rem;
+        color: rgba(255, 182, 193, 0.3);
+        font-family: serif;
+    }
+
+    .blessing::before {
+        top: -10px;
+        left: -3px;
+    }
+
+    .blessing::after {
+        bottom: -50px;
+        right: 10px;
+    }
+
+    .footer {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        text-align: center;
+        height: 65px;
+        /* padding: 15px; */
+        line-height: 65px;
+        font-size: 22px;
+        color: #ff6b94;
+        background: rgba(255, 255, 255, 0.85);
+        border-top: 3px dotted #ffacc7;
+    }
+
+    /* 关键帧动画 */
+    @keyframes bounceIn {
+        0% {
+            transform: scale(0.8);
+            opacity: 0;
+        }
+
+        60% {
+            transform: scale(1.05);
+            opacity: 1;
+        }
+
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateX(50px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes bounce {
+
+        0%,
+        20%,
+        50%,
+        80%,
+        100% {
+            transform: translateY(0);
+        }
+
+        40% {
+            transform: translateY(-15px);
+        }
+
+        60% {
+            transform: translateY(-7px);
+        }
+    }
+
+    @keyframes rainbow {
+        0% {
+            text-shadow: 3px 3px 0 #ff9ebb;
+        }
+
+        25% {
+            text-shadow: 3px 3px 0 #ffd9c8;
+        }
+
+        50% {
+            text-shadow: 3px 3px 0 #c1e3ff;
+        }
+
+        75% {
+            text-shadow: 3px 3px 0 #d0f0fd;
+        }
+
+        100% {
+            text-shadow: 3px 3px 0 #ff9ebb;
+        }
+    }
+
+    @keyframes sparkle {
+
+        0%,
+        100% {
+            opacity: 0.7;
+            transform: scale(1);
+        }
+
+        50% {
+            opacity: 1;
+            transform: scale(1.5);
+        }
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes float-item {
+
+        0%,
+        100% {
+            transform: translateY(-50%) translateY(-3px);
+        }
+
+        50% {
+            transform: translateY(-50%) translateY(5px);
+        }
+    }
+
+    @keyframes rotateFrame {
+        0% {
+            transform: rotateY(0deg);
+        }
+
+        100% {
+            transform: rotateY(360deg);
+        }
+    }
+
+    .confetti {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        /* background-color: var(--primary-color); */
+        opacity: 0;
+        z-index: 10;
+    }
+
+    /* 照片放大模态框 */
+    .photo-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.85);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 100;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s ease;
+    }
+
+    .photo-modal.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .modal-content {
+        background: white;
+        border-radius: 25px;
+        width: 80%;
+        max-width: 800px;
+        overflow: hidden;
+        position: relative;
+        box-shadow: 0 0 40px rgba(255, 182, 193, 0.6);
+        transform: scale(0.8);
+        transition: all 0.4s ease;
+    }
+
+    .photo-modal.active .modal-content {
+        transform: scale(1);
+    }
+
+    .modal-photo {
+        width: 100%;
+        height: 90vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 15rem;
+        color: #ff6b94;
+        background: #fff9fb;
+    }
+
+    .modal-caption {
+        padding: 15px;
+        text-align: center;
+        background: #ffacc7;
+        color: white;
+        font-size: 1.8rem;
+        font-weight: bold;
+    }
+
+    .close-modal {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        background: #ff6b94;
+        border-radius: 50%;
+        font-size: 2.0rem;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s;
+        z-index: 101;
+        text-align: center;
+        line-height: 50px;
+    }
+
+    .close-modal:hover {
+        transform: rotate(180deg) scale(1.1);
+        background: #d44682;
+    }
+
+    .img-item {
+        max-width: 100%;
+        max-height: 100%;
+        height: auto;
+        /* 保持图片的原始宽高比 */
+    }
+</style>
+
+</html>
