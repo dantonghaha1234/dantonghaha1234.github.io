@@ -92,7 +92,7 @@
             { name: "贾沐熹", photos: ["./img/jmx (4).jpg", "./img/jmx.jpg", "./img/jmx (3).jpg", "./img/jmx (2).jpg",], role: "小朋友", blessing: "糖豆小朋友，你像春天绽放的花朵！愿你在小学的校园里继续勇敢探索世界，每天都像花儿一样开心绽放！" },
             { name: "刘佳隽", photos: ["./img/ljj.jpg", "./img/ljj (4).jpg", "./img/ljj (6).jpg", "./img/ljj (2).jpg",], role: "小朋友", blessing: "隽隽小朋友，愿你的笑容永远像阳光一样灿烂，带着幼儿园的温暖回忆，开启新旅程！" },
             { name: "刘嘉树", photos: ["./img/ljs.jpg", "./img/ljs (2).jpg", "./img/ljs (3).jpg", "./img/ljs (4).jpg"], role: "小朋友", blessing: "嘉树小朋友，希望你带着幼儿园学到的勇敢和好奇，去探索更广阔的世界！" },
-            { name: "李泰然", photos: [ "./img/ltr.jpg", "./img/ltr (2).jpg", "./img/ltr (4).jpg"], role: "小朋友", blessing: "泰然小朋友，愿你成为一个快乐的小太阳，照亮自己，也温暖身边的人！" },
+            { name: "李泰然", photos: ["./img/ltr.jpg", "./img/ltr (2).jpg", "./img/ltr (4).jpg"], role: "小朋友", blessing: "泰然小朋友，愿你成为一个快乐的小太阳，照亮自己，也温暖身边的人！" },
             { name: "李翊溪", photos: ["./img/lyx (2).jpg", "./img/lyx (3).jpg", "./img/lyx.jpg", "./img/lyx (4).jpg", "./img/lyx (5).jpg"], role: "小朋友", blessing: "小宝小朋友，愿你的生活永远充满童趣，未来的每一步都走得踏实又精彩！" },
             { name: "李亦昕", photos: ["./img/ly (2).jpg", "./img/ly (3).jpg", "./img/ly.jpg", "./img/ly (5).jpg", "./img/ly (4).jpg"], role: "小朋友", blessing: "昕昕小朋友，愿你的人生充满彩虹，每一个梦想都能绚丽绽放！" },
             { name: "李柘铖", photos: ["./img/lzc (2).jpg", "./img/lzc (3).jpg", "./img/lzc.jpg",], role: "小朋友", blessing: "仔仔小朋友，愿你带着幼儿园的自信勇敢，在未来创造属于自己的辉煌！" },
@@ -424,6 +424,7 @@
         z-index: 10;
         padding: 20px;
     }
+
 
     .left-panel {
         background: linear-gradient(to bottom, #ffb6c1, #ffccd5);
@@ -757,6 +758,171 @@
         color: #ff6b94;
         background: rgba(255, 255, 255, 0.85);
         border-top: 3px dotted #ffacc7;
+    }
+
+    @media (max-width: 600px) {
+        .container {
+            width: 90%;
+            gap: 10px;
+            padding: 10px;
+        }
+
+        .left-panel {
+            padding: 10px;
+        }
+
+        .header {
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .header h1::after {
+            top: -2px;
+            right: -20px;
+            font-size: 14px;
+        }
+
+        .header p {
+            font-size: 12px;
+            max-width: 400px;
+            margin: 0 auto;
+            line-height: 1.6;
+            background: rgba(255, 182, 193, 0.5);
+            padding: 4px;
+        }
+
+        .selection-section {
+            padding: 10px 4px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-size: 12px;
+            margin-bottom: 15px;
+        }
+
+        label i {
+            margin-right: 4px;
+            color: #ff6b94;
+            font-size: 1.8rem;
+        }
+
+        .fa-graduation-cap {
+            margin-top: -8px;
+        }
+
+        select {
+            width: 100%;
+            padding: 4px 25px 4px 4px;
+            font-size: 14px;
+            border-radius: 20px;
+            background: #fff9fb;
+            border: 2px solid #ffacc7;
+            box-shadow: 0 8px 20px rgba(255, 107, 148, 0.25);
+            color: #d44682;
+            cursor: pointer;
+            appearance: none;
+            transition: all 0.3s;
+        }
+
+        select:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(255, 107, 148, 0.35);
+        }
+
+        select:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(255, 173, 182, 0.8);
+        }
+
+        .select-group::after {
+            content: "🎓";
+            position: absolute;
+            right: -2px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            font-size: 22px;
+            animation: float-item 3s infinite ease-in-out;
+        }
+
+        .fa-graduation-cap:before {
+            font-size: 14px;
+        }
+
+        .teacher-notes {
+            background: #ffeef3;
+            padding: 10px 4px;
+            border-radius: 18px;
+            margin-top: 30px;
+            border-left: 5px solid #ffacc7;
+            font-size: 14px;
+        }
+
+        .teacher-notes::before {
+            content: "💖";
+            position: absolute;
+            top: -6px;
+            right: 46px;
+            font-size: 26px;
+            opacity: 0.15;
+        }
+
+        .display-area {
+            padding: 10px 0px;
+        }
+
+        .photo-container {
+            margin-bottom: 10px;
+        }
+        .photo-container {
+            width: 90%;
+        }
+        .details {
+                padding: 10px 4px;
+        }
+        .display-area {
+            height: calc(100% - 40px);
+        }
+        .name {
+            font-size: 12px;
+        }
+        .name::after {
+            font-size: 20px;
+            right: -20px;
+        }
+        .role {
+            font-size: 12px;
+            padding: 4px 10px;
+        }
+        .blessing {
+            font-size: 14px;
+            line-height: 1.4;
+                padding: 15px 20px;
+        }
+        .blessing::before,.blessing::after {
+            font-size: 58px;
+        }
+        .blessing::after {
+            bottom: -38px;
+        }
+        .footer {
+            height: auto;
+            padding: 4px;
+           line-height: 1;
+            font-size: 14px;
+        }
+        .modal-content {
+            width: 95%;
+        }
+
     }
 
     /* 关键帧动画 */
